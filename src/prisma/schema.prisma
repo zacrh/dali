@@ -1,0 +1,138 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["jsonProtocol"]
+}
+
+datasource db {
+  provider          = "postgresql" // can be "postgresql" or "sqlite"
+  url               = env("DB_PRISMA_URL") // uses connection pooling
+  directUrl         = env("DB_DIRECT_URL") // uses a direct connection
+}
+
+model User {
+    id       Int    @id @default(autoincrement())
+    email    String @unique
+    emailVerified DateTime?
+    password String?
+
+    sessions Session[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    member Member? @relation(fields: [memberId], references: [id])
+    memberId Int? @unique
+}
+
+model Member {
+    id Int @id @default(autoincrement())
+    name  String
+    picture String?
+
+    year String
+    major String
+    minor String?
+
+    birthday String @db.VarChar(50) // format of 'mm-dd'
+    home String
+
+    userId Int?
+
+    attributes Attribute[]
+    roles MemberRole[] 
+    user User?
+
+    projectsOwned Project[]
+    projects Project[] @relation("projects")
+
+    Posts Post[]
+    PostLikes PostLike[]
+}
+
+model Attribute {
+    id Int @id @default(autoincrement())
+
+    name String // stuff like 'quote', 'favorite thing 1', 'fun fact', etc.
+    value String
+
+    memberId Int
+    member Member @relation(fields: [memberId], references: [id])
+}
+
+model Role {
+    id Int @id @default(autoincrement())
+    alias String @unique @db.VarChar(7) // shorthand alias like 'dev', 'pm', 'core', 'mentor', etc.; capped at 7 characters in length
+    name String // full name like 'Developer'
+    description String? // description of role and duties
+
+    members MemberRole[]
+}
+
+model MemberRole {
+    memberId Int
+    roleAlias String
+    assignedAt DateTime @default(now())
+
+    member Member    @relation(fields: [memberId], references: [id])
+    role   Role      @relation(fields: [roleAlias], references: [alias])
+
+    @@id([memberId, roleAlias])
+    @@index([roleAlias]) // speed up role-related queries (for users)
+}
+
+model Project {
+    id Int @id @default(autoincrement())
+    alias String @unique @db.VarChar(16) // will show up in URL bar
+    name String?
+
+    picture String?
+    description String? @db.VarChar(255)
+
+    ownerId Int
+    owner Member @relation(fields: [ownerId], references: [id])
+
+    members Member[] @relation("projects") // people who liked (technically spaceship'd) the project
+}
+
+model Post {
+    id String @id @default(dbgenerated("LEFT(gen_random_uuid()::text, 13)")) // not the most optimal in production since it causes some additional (and not really necessary) overhead, but I really want shorter post IDs for this case (longer ones (like the 36 char length of UUIDs) can be ugly in URLs lol, especially considering the generally low number of total posts expected in this app)
+
+    content String @db.VarChar(255)
+    createdAt DateTime @default(now())
+
+    authorId Int
+    author Member @relation(fields: [authorId], references: [id])
+
+    projectId Int?
+
+    likes PostLike[]
+}
+
+model PostLike {
+    postId String
+    memberId Int
+
+    post Post @relation(fields: [postId], references: [id])
+    member Member @relation(fields: [memberId], references: [id])
+
+    @@id([postId, memberId])
+}
+
+// Model schemas required by NextAuth when used with Prisma and Postgres. Read more: https://authjs.dev/getting-started/adapters/prisma#schema
+model Session {
+    sessionToken String   @unique
+    userId       Int
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+    identifier String
+    token      String
+    expires    DateTime
+    
+    @@id([identifier, token])
+}
