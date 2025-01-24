@@ -1,17 +1,23 @@
 import prisma from "@/lib/prisma";
-import { Member } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { Member } from "@prisma/client";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Member | { error: string }>,
+  res: NextApiResponse<Member[] | { error: string }>,
 ) {
-    const { memberId } = req.query
+    const { projectAlias } = req.query
 
-    const profile = await prisma.member.findUnique({
-        where: {
-            id: parseInt(memberId as string)
-        },
+    const members = await prisma.member.findMany({
+        ...(projectAlias !== 'dalibook' && {
+            where: {
+                projects: {
+                    some: {
+                        alias: projectAlias as string
+                    }
+                }
+            }
+        }),
         include: {
             attributes: {
                 select: {
@@ -22,7 +28,7 @@ export default async function handler(
             },
             roles: {
                 select: {
-                    role: true // get the role information (not just the alias)
+                    role: true
                 }
             },
             projects: true,
@@ -33,14 +39,13 @@ export default async function handler(
                     posts: true,
                     postLikes: true
                 }
-            },
+            }
         }
-    });
+    })
 
-
-    if (profile) {
-        res.status(200).json(profile);
+    if (members) {
+        res.status(200).json(members);
     } else {
-        res.status(404).send({ error: "Profile not found" });
+        res.status(404).send({ error: "Members not found" });
     }
 }

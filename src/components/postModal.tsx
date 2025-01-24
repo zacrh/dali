@@ -114,7 +114,7 @@ export default function PostModal({session, projects, showing, setShowModal}: Po
                              <div id="project-dropdown" className={`z-10 ${dropdownOpen["project"] ? 'absolute' : 'hidden'} p-1 bottom-10 w-32 rounded-md border border-gray-300 dark:border-border dark:bg-secondary shadow`} onBlur={() => setDropdownOpen({})}>
                                     <ul aria-labelledby="dropdownProjectButton" className="divide-y divide-border text-sm text-gray-700 dark:text-gray-200 overflow-scroll max-h-32">
                                         {
-                                            projects.map((project) => (
+                                            projects.map((project) => ( project.alias !== "dalibook" &&
                                                 <li key={project.alias} className="cursor-pointer flex items-center py-1 first:pt-0 last:pb-0" onClick={() => onDropdownItemClick(project.alias)}>
                                                     
                                                     

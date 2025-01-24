@@ -61,7 +61,7 @@ export default function Project({ projectData, session }: ProjectProps) {
                         )
                     }
                     <div className="flex flex-col">
-                        <h3 className="text-md font-semibold gap-1 flex items-center">DALI App <span className="font-medium text-gray-500 dark:text-slate-500">#{project.alias}</span></h3>
+                        <h3 className="text-md font-semibold gap-1 flex items-center">{project.name} <span className="font-medium text-gray-500 dark:text-slate-500">#{project.alias}</span></h3>
                         <p className="text-sm text-gray-500 dark:text-slate-500 -mt-0.5">Project by {project.owner.name}</p>
                     </div>
                 </div>

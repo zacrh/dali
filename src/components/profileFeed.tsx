@@ -7,7 +7,6 @@ import { MemberItem } from "@/types/members";
 import { Spinner } from "./spinner";
 import { toast } from "react-hot-toast";
 import PostFeed from "./postFeed";
-import ProjectFeed from "./projectFeed";
 
 const months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
 
@@ -63,7 +62,7 @@ export default function ProfileFeed({ memberId }: ProfileFeedProps) {
         if (previousRoute && previousRoute.startsWith("/")) {
             router.push(previousRoute); // go to previous route if it's on dalibook website
         } else {
-            router.push("/home"); // go home if external
+            router.push("/"); // go home if external
         }
     }
 
@@ -79,7 +78,7 @@ export default function ProfileFeed({ memberId }: ProfileFeedProps) {
     }
 
     return (
-        <div className="flex flex-col w-3/5 h-full overflow-scroll border-l border-r border-gray-200 dark:border-tertiary">
+        <div className="flex flex-col w-3/5 w-[52%] h-full overflow-scroll border-l border-r border-gray-200 dark:border-tertiary">
             {loading && (
                 <div className="flex items-center justify-center h-full">
                     <Spinner />
@@ -155,7 +154,7 @@ export default function ProfileFeed({ memberId }: ProfileFeedProps) {
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-library w-3 h-3"><path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/></svg>
                                 {member?.major} {member?.minor && " · " + member?.minor}
                             </div>
-                            <div key={'studies'} className="px-1.5 py-0.5 text-gray-600 dark:text-slate-500 rounded-full bg-secondary text-xs font-medium flex flex-row gap-1 items-center">
+                            <div key={'birthday'} className="px-1.5 py-0.5 text-gray-600 dark:text-slate-500 rounded-full bg-secondary text-xs font-medium flex flex-row gap-1 items-center">
                                 <svg fill="none" width="28" viewBox="0 0 24 24" height="28" className="w-3 h-3"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="m12 .757 2.122 2.122A3 3 0 0 1 13 7.829V9h4.5a3 3 0 0 1 3 3v1.646c0 .603-.18 1.177-.5 1.658V19a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-3.696a3 3 0 0 1-.5-1.658V12a3 3 0 0 1 3-3H11V7.829a3 3 0 0 1-1.121-4.95L12 .757ZM6.5 11a1 1 0 0 0-1 1v1.646a1 1 0 0 0 .629.928l.5.2a1 1 0 0 0 .742 0l1.015-.405a3 3 0 0 1 2.228 0l1.015.405a1 1 0 0 0 .742 0l1.015-.405a3 3 0 0 1 2.228 0l1.015.405a1 1 0 0 0 .742 0l.5-.2a1 1 0 0 0 .629-.928V12a1 1 0 0 0-1-1h-11ZM6 16.674V19a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-2.326a3 3 0 0 1-2.114-.043l-1.015-.405a1 1 0 0 0-.742 0l-1.015.405a3 3 0 0 1-2.228 0l-1.015-.405a1 1 0 0 0-.742 0l-1.015.405A3 3 0 0 1 6 16.674ZM12.002 6a1 1 0 0 0 .706-1.707L12 3.586l-.707.707A1 1 0 0 0 12.002 6Z"></path></svg>
                                 {months[parseInt(member?.birthday.split("-")[0] as string)]}, {parseInt(member?.birthday.split("-")[1] as string)}
                             </div>

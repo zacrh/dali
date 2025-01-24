@@ -3,9 +3,10 @@ import { Session } from "next-auth";
 import { PostItem } from "@/types/posts";
 import Link from "next/link";
 import Image from "next/image";
-import { timeAgo } from "@/lib/utils";
+import { formatReadableDate, timeAgo } from "@/lib/utils";
 import { useRouter } from "next/router";
 import { toast } from "react-hot-toast";
+import Tooltip from "./tooltip";
 
 type PostProps = {
     postData: PostItem;
@@ -102,7 +103,7 @@ export default function Post({ postData, session }: PostProps) {
       }
 
     return(
-        <Link key={post.id} href={`/post/${post.id}`} className="flex flex-row w-full border-b py-3 px-4 border-gray-200 dark:border-tertiary gap-3 hover:bg-gray-100 dark:hover:bg-posthover transition-colors">
+        <Link key={post.id} href={`/project/${post.projectId ? post.project.alias : 'dalibook'}`} className="flex flex-row w-full border-b py-3 px-4 border-gray-200 dark:border-tertiary gap-3 hover:bg-gray-100 dark:hover:bg-posthover transition-colors">
                     <Link href={`/profile/${post.author.id}`} className="h-max">
                         {post.author.picture ? (
                             <Image
@@ -127,7 +128,9 @@ export default function Post({ postData, session }: PostProps) {
                                         </div>
                                     ))
                                 }
+                                <Tooltip content={formatReadableDate(post.createdAt)}>
                                 <p className="text-sm text-gray-600 dark:text-slate-500">{timeAgo(post.createdAt)}</p>
+                                </Tooltip>
                             </Link>
                             <div className="relative">
                                 <div className="flex items-center justify-center rounded-full p-1 hover:bg-gray-100 dark:hover:bg-tertiary transition-all duration-200 color-gray-400 dark:text-slate-400" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onMoreClick(post.id) }}>

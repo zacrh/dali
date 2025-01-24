@@ -2,7 +2,7 @@
 // helper for displaying how long ago a post was made in feed
 export function timeAgo(inputDate: Date): string {
     const date = typeof inputDate === "string" ? new Date(inputDate) : inputDate;
-    
+
     const now = new Date();
     const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
   
@@ -34,3 +34,20 @@ export function timeAgo(inputDate: Date): string {
     }
   }
   
+
+export  function formatReadableDate(inputDate: Date): string {
+    const date = typeof inputDate === "string" ? new Date(inputDate) : inputDate;
+    
+    const options: Intl.DateTimeFormatOptions = {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+    };
+
+    // Format date and time
+    const formatter = new Intl.DateTimeFormat('en-US', options);
+    return formatter.format(date).replace(',', ' at');
+}
