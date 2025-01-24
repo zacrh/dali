@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  reactStrictMode: false, // true in dev
+  reactStrictMode: true,
   images: {
     domains: ["api.typeform.com", "static.valorantstats.xyz"],
   },
