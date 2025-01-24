@@ -481,7 +481,7 @@ export default function WelcomeForm() {
                 id="quote"
                 name="quote"
                 type="quote" // invalid, but putting "text" adds a black focus ring regardless of color scheme (light or dark)
-                placeholder='"Facebook was not originally created to be a company." - Mark Zuckerberg'
+                placeholder={`"Drop the 'the' — it's cleaner" - Sean Parker`}
                 autoComplete="off"
                 defaultValue={memberData?.attributes?.find(attribute => attribute.name === "quote")?.value || ""}
                 onChange={(e) => onAttributeChange("quote", e.target.value)}

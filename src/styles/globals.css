@@ -12,6 +12,10 @@
   --secondary: #1E2936;
   --error: #E60B41;
   --success: #0ee6a8;
+  --like: #EC4899;
+  --like-hover: #EC489922;
+  --post-hover: #1B222E;
+  --transparent: transparent;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -26,6 +30,10 @@
     --tertiary: #263544;
     --error: #E60B41;
     --success: #0fd680;
+    --like: #EC4899;
+    --like-hover: #EC489922;
+    --post-hover: #1B222E;
+    --transparent: transparent;
 
     --text-color: rgb(241, 243, 245);
     --bright-text-color: #ADBBC9;

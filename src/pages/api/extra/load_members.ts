@@ -39,6 +39,7 @@ export default async function handler(
         //         { alias: 'pm', name: 'Product Manager' },
         //         { alias: 'core', name: 'Core' },
         //         { alias: 'mentor', name: 'Mentor' }
+        //         { alias: 'applicant', name: 'Applicant' }
         //     ]
         // })
         console.log('test')
