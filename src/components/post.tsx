@@ -109,9 +109,9 @@ export default function Post({ postData, session }: PostProps) {
                             <Image
                                 src={post.author.picture}
                                 alt="Avatar"
-                                className="w-10 rounded-full border border-gray-300 dark:border-tertiary"
-                                width={100}
-                                height={100}
+                                className="w-10 h-10 object-cover rounded-full border border-gray-300 dark:border-tertiary"
+                                width={40}
+                                height={40}
                             />
                         ) : (
                             <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-secondary border border-gray-300 dark:border-tertiary" />
