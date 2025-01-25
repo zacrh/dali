@@ -168,7 +168,7 @@ export default function ProjectFeed({ projectAlias }: ProjectFeedProps) {
                                     <h2 className="text-2xl font-semibold">{project.name} <span className="font-medium text-gray-500 dark:text-slate-500 ml-1">#{project.alias}</span></h2>
                                     <div className="flex flex-row items-end gap-2">
                                         {
-                                            !joined && (
+                                            !joined && (project.alias !== "dali") && (
                                                 <button onClick={() => onJoinClick()} className="flex items-center justify-center p-1.5 rounded-full text-white w-max h-max bg-gray-200 dark:bg-secondary hover:bg-gray-300 dark:hover:bg-tertiary transition-colors">
                                                     {
                                                         joinLoading ? (
@@ -185,7 +185,7 @@ export default function ProjectFeed({ projectAlias }: ProjectFeedProps) {
                                         </button>
                                     </div>
                                 </div>
-                                <p className="text-sm font-medium text-gray-600 dark:text-slate-500">Created by {project.alias !== "dalibook" ? project.owner.name : "Dalibook"} · {project._count.members + 1} member{project._count.members === 0 ? '' : 's'}</p>
+                                <p className="text-sm font-medium text-gray-600 dark:text-slate-500">Created by {project.owner.name} · {project._count.members + 1} member{project._count.members === 0 ? '' : 's'}</p>
                             </div>
                         </div>
                         {

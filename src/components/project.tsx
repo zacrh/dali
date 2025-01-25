@@ -67,7 +67,7 @@ export default function Project({ projectData, session }: ProjectProps) {
                 </div>
                 
                 {
-                    !joined && (
+                    !joined && (project.alias !== "dali") && (
                         <div className="flex p-1.5 rounded-md cursor-pointer hover:bg-gray-300 dark:hover:bg-secondary transition-colors" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onJoinClick(); }}>
                             {
                                 joinLoading ? (

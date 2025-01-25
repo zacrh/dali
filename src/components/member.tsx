@@ -53,7 +53,7 @@ export default function Member({ memberData, session }: MemberProps) {
                     <Image
                         src={member.picture}
                         alt="Avatar"
-                        className="w-10 h-10 object-none rounded-full bg-gray-200 dark:bg-secondary border border-gray-300 dark:border-tertiary"
+                        className="w-10 h-10 object-cover rounded-full bg-gray-200 dark:bg-secondary border border-gray-300 dark:border-tertiary"
                         width={40}
                         height={40}
                     />

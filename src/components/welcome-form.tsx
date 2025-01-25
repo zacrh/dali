@@ -408,6 +408,14 @@ export default function WelcomeForm() {
                 </label>
                 <input id="mentor-checkbox" type="checkbox" value="" checked={newRoles.find(role => role.roleAlias === "mentor") ? newRoles.find(role => role.roleAlias === "mentor")?.checked : memberData?.roles?.find(role => role.roleAlias === "mentor") ? true : false} onChange={(e) => onRoleChange("mentor", e.target.checked)} className="w-4 h-4 text-primary bg-gray-100 dark:bg-secondary border-gray-300 dark:border-border rounded focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary focus:ring-2" />
             </div>
+            <div className="flex flex-row w-full justify-between gap-6 items-center">
+                <label
+                className="text-md font-medium text-gray-600 dark:text-slate-400"
+                >
+                Applicant
+                </label>
+                <input id="applied-checkbox" type="checkbox" value="" checked={newRoles.find(role => role.roleAlias === "applied") ? newRoles.find(role => role.roleAlias === "applied")?.checked : memberData?.roles?.find(role => role.roleAlias === "applied") ? true : false} onChange={(e) => onRoleChange("applied", e.target.checked)} className="w-4 h-4 text-primary bg-gray-100 dark:bg-secondary border-gray-300 dark:border-border rounded focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary focus:ring-2" />
+            </div>
             </div>
         </div>
         <h3 className="text-xl font-semibold pt-4">More About You</h3>

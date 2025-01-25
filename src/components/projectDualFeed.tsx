@@ -122,6 +122,23 @@ export default function ProjectDualFeed({ subject, projectAlias, session }: Post
                     <Member memberData={person} session={session} />
                 ))
             )}
+
+            {
+                topic.toLowerCase().includes('people') && people?.length === 0 && !loading[topic] && (
+                    <div className="flex flex-col items-center justify-center mt-8 gap-1">
+                        <h4 className="text-lg font-semibold">No Members Found</h4>
+                        <p className="text-sm font-medium text-gray-500 dark:text-slate-500">Feels like there should be tumbleweed here!</p>
+                    </div>
+                )
+            }
+            {
+                !topic.toLowerCase().includes('people') && posts?.length === 0 && !loading[topic] && (
+                    <div className="flex flex-col items-center justify-center mt-8 gap-1">
+                        <h4 className="text-lg font-semibold">No Posts Found</h4>
+                        <p className="text-sm font-medium text-gray-500 dark:text-slate-500">Feels like there should be tumbleweed here!</p>
+                    </div>
+                )
+            }
         </div>
     )
 }
