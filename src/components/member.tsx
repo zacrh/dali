@@ -96,7 +96,7 @@ export default function Member({ memberData, session }: MemberProps) {
                         {
                             attributes['favorite thing 1'] && (
                                 <Tooltip content="Favorite Thing">
-                                    <div className="flex flex-row gap-2 items-center max-w-[512px]">
+                                    <div className="flex flex-row gap-2 items-center max-w-[500px]">
                                 <div className="flex flex-row gap-1 items-center w-max">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-star w-4 h-4 text-primary"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
                                         </div>
@@ -108,7 +108,7 @@ export default function Member({ memberData, session }: MemberProps) {
                         {
                             attributes['fun fact'] && (
                                 <Tooltip content="Fun Fact">
-                                <div className="flex flex-row gap-2 items-center max-w-[512px]">
+                                <div className="flex flex-row gap-2 items-center max-w-[500px]">
                                 <div className="flex flex-row gap-1 items-center w-max">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-info w-4 h-4 text-primary"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
                                     </div>
@@ -120,7 +120,7 @@ export default function Member({ memberData, session }: MemberProps) {
                         {
                             attributes['favorite dartmouth tradition'] && (
                                 <Tooltip content="Dartmouth Tradition">
-                                    <div className="flex flex-row gap-2 items-center max-w-[512px]">
+                                    <div className="flex flex-row gap-2 items-center max-w-[500px]">
                                 <div className="flex flex-row gap-1 items-center w-max">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-flame-kindling w-4 h-4 text-primary"><path d="M12 2c1 3 2.5 3.5 3.5 4.5A5 5 0 0 1 17 10a5 5 0 1 1-10 0c0-.3 0-.6.1-.9a2 2 0 1 0 3.3-2C8 4.5 11 2 12 2Z"/><path d="m5 22 14-4"/><path d="m5 18 14 4"/></svg>
                                             {/* <p className="text-sm font-medium text-gray-600 dark:text-slate-500 w-max">Dartmouth Tradition</p> */}
@@ -133,7 +133,7 @@ export default function Member({ memberData, session }: MemberProps) {
                         {
                             attributes['quote'] && (
                                 <Tooltip content="Quote">
-                                    <div className="flex flex-row gap-2 items-center max-w-[512px]">
+                                    <div className="flex flex-row gap-2 items-center max-w-[500px]">
                                 <div className="flex flex-row gap-1 items-center w-max">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-quote w-4 h-4 text-primary"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/></svg>
                                             {/* <p className="text-sm font-medium text-gray-600 dark:text-slate-500 w-max">Quote</p> */}
