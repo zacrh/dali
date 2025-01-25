@@ -8,6 +8,7 @@ import { useRouter } from 'next/router'
 import { toast } from "react-hot-toast";
 import Image from "next/image";
 import ProjectDualFeed from "./projectDualFeed";
+import { checkForAliasMismatch } from "@/lib/utils";
 
 type ProjectFeedProps = {
     projectAlias: string;
@@ -87,8 +88,12 @@ export default function ProjectFeed({ projectAlias }: ProjectFeedProps) {
                     throw new Error(`HTTP error! status: ${res.status}`);
                 }
                 const data = await res.json();
+                if (checkForAliasMismatch(projectAlias, data?.alias)) { // do this check because sometimes the user might got to a diff project page from this project page before the fetch is done
+                    // project alias mismatch
+                    return;
+                } 
                 setProject(data);
-                setJoined(data.members.some((member: { id: string }) => member.id === session?.user.member.id) || data.owner.id === session?.user.member.id);
+                // setJoined(data.members.some((member: { id: number }) => member.id === session?.user.member.id) || data.owner.id === session?.user.member.id);
 
                 // cache project
                 const cachedProjects = window.sessionStorage.getItem("projects") || "{}";
@@ -102,6 +107,7 @@ export default function ProjectFeed({ projectAlias }: ProjectFeedProps) {
         }
 
         if (projectAlias) {
+            console.log('project alias', projectAlias, window.location.pathname);
             fetchProject();
             const cachedProjects = window.sessionStorage.getItem("projects") || "{}";
             if (Object.keys(JSON.parse(cachedProjects)).includes(projectAlias)) {
@@ -111,6 +117,10 @@ export default function ProjectFeed({ projectAlias }: ProjectFeedProps) {
             setLoading(false);
         }
     }, [projectAlias])
+
+    useEffect(() => {
+        setJoined(project?.members.some((member: { id: number }) => member.id === session?.user.member.id) || project?.owner.id === session?.user.member.id);
+    }, [session, project])
     
     
 

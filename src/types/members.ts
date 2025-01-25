@@ -1,4 +1,4 @@
-import type { Member } from "@prisma/client";
+import type { Member, Project } from "@prisma/client";
 import type { Attribute } from "@prisma/client";
 import type { MemberRole } from "@prisma/client";
 import type { Role } from "@prisma/client";
@@ -15,5 +15,8 @@ export type WorkingMemberRole = Omit<MemberRole, "assignedAt" | "memberId"> & {c
 // MemberRole type with related fields (role information)
 export type MemberRoleItem = MemberRole & {role: Role};
 
+// Role item without member-related fields (response from Prisma)
+export type RoleItem = { role: Role };
+
 // Member type with all related fields
-export type MemberItem = Member & {attributes: Attribute[], roles: MemberRoleItem[], _count: { projects: number, projectsOwned: number, posts: number, postLikes: number }};
+export type MemberItem = Member & {attributes: Attribute[], roles: RoleItem[], projects: Project[], _count: { projects: number, projectsOwned: number, posts: number, postLikes: number }};

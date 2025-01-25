@@ -37,7 +37,7 @@ export function timeAgo(inputDate: Date): string {
 
 export  function formatReadableDate(inputDate: Date): string {
     const date = typeof inputDate === "string" ? new Date(inputDate) : inputDate;
-    
+
     const options: Intl.DateTimeFormatOptions = {
         month: 'long',
         day: 'numeric',
@@ -50,4 +50,12 @@ export  function formatReadableDate(inputDate: Date): string {
     // Format date and time
     const formatter = new Intl.DateTimeFormat('en-US', options);
     return formatter.format(date).replace(',', ' at');
+}
+
+export function checkForAliasMismatch(alias: string, dataAlias: string) {
+    if (alias !== dataAlias || window.location.pathname.replace("/project/", "") !== dataAlias) {
+        return true;
+    }
+
+    return false;
 }

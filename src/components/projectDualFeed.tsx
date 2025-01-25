@@ -11,6 +11,9 @@ import Post from "./post";
 import Project from "./project";
 import { MemberItem } from "@/types/members";
 import Member from "./member";
+import { checkForAliasMismatch } from "@/lib/utils";
+import { GetProjectMembersResponse } from "@/pages/api/projects/[projectAlias]/members/get";
+import { GetProjectPostsResponse } from "@/pages/api/projects/[projectAlias]/posts/get";
 
 
 type PostFeedProps = {
@@ -21,12 +24,22 @@ type PostFeedProps = {
 
 export default function ProjectDualFeed({ subject, projectAlias, session }: PostFeedProps) {
     const [topic, setTopic] = useState<string>("posts");
+    const [alias, setAlias] = useState<string>(projectAlias);
     const [posts, setPosts] = useState<PostItem[]|null>(null);
     const [people, setPeople] = useState<MemberItem[]|null>(null);
     const [loading, setLoading] = useState<{ [key: string]: boolean }>({});
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        let newProject = false;
+        if (projectAlias !== alias) {
+            newProject = true;
+            setPosts(null);
+            setPeople(null);
+            setLoading({});
+            setError(null);
+            setAlias(projectAlias);
+        }
         let temp_topic = topic;
         setTopic(subject.toLowerCase());
         temp_topic = subject.toLowerCase();
@@ -42,18 +55,25 @@ export default function ProjectDualFeed({ subject, projectAlias, session }: Post
                     throw new Error(`HTTP error! status: ${res.status}`);
                 }
                 if (temp_topic.toLowerCase().includes('people')) {
-                    const data: MemberItem[] = await res.json();
+                    const data: GetProjectMembersResponse = await res.json();
+                    if (checkForAliasMismatch(projectAlias, data?.project)) { // do this check because sometimes the user might got to a diff project page from this project page before the fetch is done
+                        return;
+                    }
                     console.log('data projects ', data);
                     setPeople((prevPeople) => ([
                         ...(prevPeople || []),
-                        ...data,
+                        ...data.members,
                     ]));
                 } else {
-                    const data: PostItem[] = await res.json();
+                    const data: GetProjectPostsResponse = await res.json();
+                    if (checkForAliasMismatch(projectAlias, data?.project)) { // do this check because sometimes the user might got to a diff project page from this project page before the fetch is done
+                        return;
+                    }
+                    console.log('aliases', projectAlias, alias, newProject)
                     console.log('data posts ', data);
                     setPosts((prevPosts) => ([
                         ...(prevPosts || []), // Preserve existing categories
-                        ...data, // Merge existing and new posts for this category
+                        ...data.posts, // Merge existing and new posts for this category
                     ]));
                 }
                 console.log('posts', posts);
@@ -66,20 +86,21 @@ export default function ProjectDualFeed({ subject, projectAlias, session }: Post
         };
 
         if (temp_topic.toLowerCase().includes('posts')) {
-            if (posts || loading[temp_topic]) {
+            console.log('in here ', posts, loading[temp_topic], newProject);
+            if (!newProject && (posts || loading[temp_topic])) {
                 return;
             } else {
                 fetchPosts();
             }
         } else {
-            if (people || loading[temp_topic]) {
+            if (!newProject && (people || loading[temp_topic])) {
                 return;
             } else {
                 fetchPosts();
             }
         }
 
-    }, [subject]);
+    }, [subject, projectAlias]);
 
     return (
         <div className="flex flex-col w-full pb-36">
