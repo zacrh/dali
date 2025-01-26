@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import Form from "@/components/form";
-import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { dartmouthEmailPattern } from "@/validations/email";
 
 import type { Member } from "@prisma/client";
 import WelcomeForm from "@/components/welcome-form";

@@ -4,8 +4,6 @@ import Image from "next/image";
 import { ProjectItem } from "@/types/projects";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
-import toast from "react-hot-toast";
-import { Spinner } from "./spinner";
 
 type ProjectProps = {
     projectData: ProjectItem;

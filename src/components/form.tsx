@@ -4,7 +4,6 @@ import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { emailValidator } from "@/validations/email";
 
 const authType = "email";
 

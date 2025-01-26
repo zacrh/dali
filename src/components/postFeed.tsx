@@ -1,10 +1,6 @@
 
 
 import { useState, useEffect, useRef } from "react";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { Session } from "next-auth";
 import { PostItem } from "@/types/posts";
 import { ProjectItem } from "@/types/projects";

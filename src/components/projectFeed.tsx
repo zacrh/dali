@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { ProjectItem } from "@/types/projects";
 import { useSession } from "next-auth/react";
 import { Spinner } from "./spinner";
-import Project from "./project";
 import { usePreviousRoute } from "../context/PreviousRouteProvider";
 import { useRouter } from 'next/router'
 import { toast } from "react-hot-toast";

@@ -1,8 +1,4 @@
 import { useState, useEffect, FormEvent } from "react";
-import { signIn } from "next-auth/react";
-// import LoadingDots from "@/components/loading-dots";
-import toast from "react-hot-toast";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { dartmouthEmailPattern } from "@/validations/email";

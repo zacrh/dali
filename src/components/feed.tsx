@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import PostFeed from "./postFeed";
 
 export default function Feed() {

@@ -1,7 +1,5 @@
 import { useState, useEffect, FormEvent } from "react";
-import Link from "next/link";
 import { Session } from "next-auth";
-import { Project } from "@prisma/client";
 import { WorkingProject } from "@/types/projects";
 import toast from "react-hot-toast";
 import { useRouter } from 'next/router'
@@ -31,18 +29,6 @@ export default function ProjectModal({ session, showing, setShowModal }: Project
 
     const [dropdownOpen, setDropdownOpen] = useState<{ [key: string]: boolean }>({});
     const router = useRouter();
-
-
-    const toggleDropdown = (id: string) => {
-        setDropdownOpen((prev) => ({
-          ...prev,
-          [id]: !prev[id],
-        }));
-    }
-
-    const onDropdownItemClick = (project: string) => {
-        setDropdownOpen({});
-    }
 
     const onCreateClick = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();

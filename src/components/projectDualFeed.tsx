@@ -1,14 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { Session } from "next-auth";
 import { PostItem } from "@/types/posts";
-import { ProjectItem } from "@/types/projects";
 import { Spinner } from "./spinner";
 import Post from "./post";
-import Project from "./project";
 import { MemberItem } from "@/types/members";
 import Member from "./member";
 import { checkForAliasMismatch } from "@/lib/utils";

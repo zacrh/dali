@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ProjectItem } from "@/types/projects";
 import { Session } from "next-auth";
-import { useRouter } from "next/router";
 import toast from "react-hot-toast";
-import { Spinner } from "./spinner";
 import { MemberItem } from "@/types/members";
 import Tooltip from "./tooltip";
 

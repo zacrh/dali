@@ -2,7 +2,6 @@ import prisma from "@/lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
-import { Post } from "@prisma/client";
 
 type PostData = {
     postId: String,

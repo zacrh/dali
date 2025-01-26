@@ -1,6 +1,5 @@
 import prisma from "@/lib/prisma";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Member } from "@prisma/client";
 import { MemberItem } from "@/types/members";
 
 export type GetProjectMembersResponse = {

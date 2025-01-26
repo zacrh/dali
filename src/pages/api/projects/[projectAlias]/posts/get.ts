@@ -1,6 +1,5 @@
 import prisma from "@/lib/prisma";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Post } from "@prisma/client";
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../../../auth/[...nextauth]"
 import { z } from 'zod';

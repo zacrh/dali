@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
-import { Post, Project } from "@prisma/client";
+import { Project } from "@prisma/client";
 
 type ProjectData = {
     project: Project,
