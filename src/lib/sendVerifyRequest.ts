@@ -27,15 +27,21 @@ export async function sendVerifyRequest(params: Params) {
     });
 
     console.log('after create transport')
-    const result = await transport.sendMail({
-        to: identifier,
-        from: provider.from,
-        subject: `Log in to Dalibook`,
-        text: text({ url, host }),
-        html: html({ url, host }),
-      })    
+    try {
+        console.log('right before')
+        const result = await transport.sendMail({
+            to: identifier,
+            from: provider.from,
+            subject: `Log in to Dalibook`,
+            text: text({ url, host }),
+            html: html({ url, host }),
+          })    
+          console.log("After mail sent", result);
+    } catch (error) {
+        console.error('Error sending email', error)
+    }
+    
 
-      console.log("After mail sent", result);
 }
 
 /**
@@ -48,7 +54,7 @@ export async function sendVerifyRequest(params: Params) {
  */
 function html(params: { url: string, host: string }) {
     const { url, host } = params;
-
+    console.log('in mailing send html thing')
     const escapedHost = host.replace(/\./g, "&#8203;.");
 
     return `
