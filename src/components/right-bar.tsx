@@ -84,7 +84,7 @@ export default function RightBar({ session }: RightBarProps ) {
                 </Link> */}
                 {
                     userProjects?.map((project) => (
-                        <Link href={`/project/${project.alias}`} className="flex flex-row gap-2 group">
+                        <Link key={project.alias} href={`/project/${project.alias}`} className="flex flex-row gap-2 group">
                             <p className={`text-md ${pathName === `/project/${project.alias}` ? 'font-semibold' : 'text-gray-400 dark:text-slate-400'} group-hover:underline`}>{project.name ? project.name : project.alias}</p>
                         </Link>
                     ))
@@ -105,7 +105,7 @@ export default function RightBar({ session }: RightBarProps ) {
                 {loading && <div className="flex items-center justify-center mt-8"><Spinner /></div>}
 
                 {trendingProjects.map((project) => (
-                    <Link href={`/project/${project.alias}`} className="flex flex-row gap-2">
+                    <Link key={project.alias} href={`/project/${project.alias}`} className="flex flex-row gap-2">
                         <button className="px-2 py-1 text-primary rounded-full border border-tertiary hover:bg-secondary text-sm font-medium flex flex-row gap-1 items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-hash w-4 h-4"><line x1="4" x2="20" y1="9" y2="9"/><line x1="4" x2="20" y1="15" y2="15"/><line x1="10" x2="8" y1="3" y2="21"/><line x1="16" x2="14" y1="3" y2="21"/></svg>
                             {/* {project === "dalibook" ? <p className="text-sm font-medium text-gray-400 dark:text-slate-400">Project</p> : <p className="text-sm font-medium text-gray-400 dark:text-slate-400">{project}</p>} */}

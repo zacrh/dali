@@ -68,7 +68,7 @@ export default async function handler(
             })
 
             // Add their attributes
-            let attributes = [
+            const attributes = [
                 { name: 'quote', value: member.quote, memberId: newMember.id },
                 { name: 'favorite thing 1', value: member["favorite thing 1"], memberId: newMember.id },
                 { name: 'favorite thing 2', value: member["favorite thing 2"], memberId: newMember.id },
@@ -90,7 +90,7 @@ export default async function handler(
             console.log("didn't fail", newAttributes)
 
             // Add their role(s)
-            let memberRoles = []
+            const memberRoles = []
 
             if (member.dev) { memberRoles.push({ roleAlias: 'dev', memberId: newMember.id })}
             if (member.des) { memberRoles.push({ roleAlias: 'des', memberId: newMember.id })}

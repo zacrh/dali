@@ -160,7 +160,7 @@ export default function Post({ postData, session }: PostProps) {
                                 <h2 className="text-md font-semibold">{post.author.name}</h2>
                                 {
                                     post.author.roles?.map((role) => (
-                                        <div className="px-1.5 py-0.5 text-primary rounded-full bg-primaryhover text-xs font-medium flex flex-row gap-1 items-center">
+                                        <div key={role.role.alias} className="px-1.5 py-0.5 text-primary rounded-full bg-primaryhover text-xs font-medium flex flex-row gap-1 items-center">
                                             {role.role.name}
                                         </div>
                                     ))

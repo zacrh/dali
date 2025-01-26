@@ -21,8 +21,8 @@ export default function Member({ memberData, session, owner = false }: MemberPro
 
     useEffect(() => {
         if (Object.keys(attributes).length === 0 && memberData.attributes) {
-            let newAttributes: { [key: string]: string } = {};
-            for (let attribute of memberData.attributes) {
+            const newAttributes: { [key: string]: string } = {};
+            for (const attribute of memberData.attributes) {
                 newAttributes[attribute.name] = attribute.value;
             }
             setAttributes(newAttributes);
@@ -65,7 +65,7 @@ export default function Member({ memberData, session, owner = false }: MemberPro
                         <h2 className="text-md font-semibold">{member.name}</h2>
                         {
                             member.roles?.map((role) => (
-                                <div className="px-1.5 py-0.5 text-primary rounded-full bg-primaryhover text-xs font-medium flex flex-row gap-1 items-center">
+                                <div key={role.role.alias} className="px-1.5 py-0.5 text-primary rounded-full bg-primaryhover text-xs font-medium flex flex-row gap-1 items-center">
                                     {role.role.name}
                                 </div>
                             ))

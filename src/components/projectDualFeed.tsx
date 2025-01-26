@@ -135,7 +135,7 @@ export default function ProjectDualFeed({ subject, projectAlias, session, projec
             ) : (
                 people?.map((person) => (
                     person.id !== 59 && ( // don't show Dalibook user
-                        <Member memberData={person} session={session} owner={person.id === projectOwnerId} />
+                        <Member key={person.id} memberData={person} session={session} owner={person.id === projectOwnerId} />
                     )
                 ))
             )}

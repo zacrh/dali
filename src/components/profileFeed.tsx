@@ -41,8 +41,8 @@ export default function ProfileFeed({ memberId }: ProfileFeedProps) {
                 const data = await res.json();
                 console.log("Member data:", data);
                 setMember(data);
-                let newAttributes: { [key: string]: string } = {};
-                for (let attribute of data.attributes) {
+                const newAttributes: { [key: string]: string } = {};
+                for (const attribute of data.attributes) {
                     newAttributes[attribute.name] = attribute.value;
                 }
                 setAttributes(newAttributes);
@@ -63,8 +63,8 @@ export default function ProfileFeed({ memberId }: ProfileFeedProps) {
             if (JSON.parse(recentProfiles)[memberId]) {
                 const cachedMember = JSON.parse(recentProfiles)[memberId];
                 setMember(cachedMember);
-                let newAttributes: { [key: string]: string } = {};
-                for (let attribute of cachedMember.attributes) {
+                const newAttributes: { [key: string]: string } = {};
+                for (const attribute of cachedMember.attributes) {
                     newAttributes[attribute.name] = attribute.value;
                 }
                 setAttributes(newAttributes);

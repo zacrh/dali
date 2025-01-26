@@ -124,7 +124,7 @@ export default function ProjectsPage({ session }: ProjectsPageProps) {
                         </div>
                         <div className="flex flex-col ">
                             <h3 className="text-lg font-semibold">Your Projects</h3>
-                            <p className="text-sm text-gray-200 dark:text-slate-300">All the projects you're a part of, right in one place.</p>
+                            <p className="text-sm text-gray-200 dark:text-slate-300">All the projects you&apos;re a part of, right in one place.</p>
                         </div>
                     </div>
                 )
