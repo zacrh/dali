@@ -89,7 +89,7 @@ export default function LeftNav({ session }: LeftBarProps) {
                                                 height={500}
                                                 />
                                                 </div>
-                        <h2 className="text-xl font-bold">Share what you're building in DALI</h2>
+                        <h2 className="text-xl font-bold">Share what you&apos;re building in DALI</h2>
                         <Link href="/login" className="flex flex-row items-center gap-1 px-3 py-1.5 w-max text-sm font-semibold text-white rounded-md  bg-primary hover:brightness-125 transition-all">
                             Sign In
                         </Link>
