@@ -18,7 +18,6 @@ export async function sendVerifyRequest(params: Params) {
     console.log(provider.server, provider.from, host, identifier, url, provider)
     const transport = createTransport({
         host: 'smtp.resend.com',
-        secure: true,
         port: 587,
         auth: {
             user: process.env.EMAIL_USERNAME,
@@ -27,7 +26,6 @@ export async function sendVerifyRequest(params: Params) {
     });
 
     console.log('after create transport')
-    try {
         console.log('right before')
         const result = await transport.sendMail({
             to: identifier,
@@ -37,9 +35,6 @@ export async function sendVerifyRequest(params: Params) {
             html: html({ url, host }),
           })    
           console.log("After mail sent", result);
-    } catch (error) {
-        console.error('Error sending email', error)
-    }
     
 
 }
