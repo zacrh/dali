@@ -35,8 +35,9 @@ export default function PostFeed({ subject, session }: PostFeedProps) {
             temp_topic = subject.toLowerCase();
         }
         console.log("HELLO", subject, topic, temp_topic);
+        console.log("HERE", posts);
         
-        const fetchPosts = async () => {
+        const fetchPosts = async ( initial: boolean = false ) => { // initial is true if we're fetching for the first time
             console.log('temp topic', temp_topic);
             setLoading({ ...loading, [temp_topic]: true });
             try {
@@ -49,15 +50,21 @@ export default function PostFeed({ subject, session }: PostFeedProps) {
                     console.log('data projects ', data);
                     setProjects((prevProjects) => ({
                         ...prevProjects, // Preserve existing categories
-                        [temp_topic]: [...(prevProjects[temp_topic] || []), ...data], // Merge existing and new posts for this category
+                        [temp_topic]: [...(!initial ? prevProjects[temp_topic] || [] : []), ...data], // merge existing posts for feed — only if we're loading again (and not for the first time, hence the 'onCache' check, which checks if the current posts in state are from cache or server)
                     }));
+
+                    const recentFeeds = window.sessionStorage.getItem("recentFeeds") || "{}";
+                    window.sessionStorage.setItem("recentFeeds", JSON.stringify({ ...JSON.parse(recentFeeds), ["main__" + temp_topic]: data }));
                 } else {
                     const data: PostItem[] = await res.json();
                     console.log('data posts ', data);
                     setPosts((prevPosts) => ({
                         ...prevPosts, // Preserve existing categories
-                        [temp_topic]: [...(prevPosts[temp_topic] || []), ...data], // Merge existing and new posts for this category
+                        [temp_topic]: [...(!initial ? (prevPosts[temp_topic] || []) : []), ...data], // merge existing posts for feed — only if we're loading again (and not for the first time, hence the 'onCache' check, which checks if the current posts in state are from cache or server)
                     }));
+
+                    const recentFeeds = window.sessionStorage.getItem("recentFeeds") || "{}";
+                    window.sessionStorage.setItem("recentFeeds", JSON.stringify({ ...JSON.parse(recentFeeds), ["main__" + temp_topic]: data }));
                 }
                 console.log('posts', posts);
             } catch (error) {
@@ -68,17 +75,32 @@ export default function PostFeed({ subject, session }: PostFeedProps) {
             }
         };
 
+        const recentFeeds = window.sessionStorage.getItem("recentFeeds") || "{}";
         if (temp_topic.toLowerCase().includes('projects')) {
             if ((projects[temp_topic]) || loading[temp_topic]) {
                 return;
             } else {
-                fetchPosts();
+                fetchPosts(true);
+                if (JSON.parse(recentFeeds)["main__" + temp_topic]) {
+                    setProjects((prevProjects) => ({
+                        ...prevProjects,
+                        [temp_topic]: JSON.parse(recentFeeds)["main__" + temp_topic],
+                    }));
+                    setLoading({ ...loading, [temp_topic]: false });
+                }
             }
         } else {
             if ((posts[temp_topic]) || loading[temp_topic]) {
                 return;
             } else {
-                fetchPosts();
+                fetchPosts(true);
+                if (JSON.parse(recentFeeds)["main__" + temp_topic]) {
+                    setPosts((prevPosts) => ({
+                        ...prevPosts,
+                        [temp_topic]: JSON.parse(recentFeeds)["main__" + temp_topic],
+                    }));
+                    setLoading({ ...loading, [temp_topic]: false });
+                }
             }
         }
 

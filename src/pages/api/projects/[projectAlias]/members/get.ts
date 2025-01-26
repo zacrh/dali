@@ -20,13 +20,24 @@ export default async function handler(
     }
 
     const members = await prisma.member.findMany({
-        ...(projectAlias !== 'dalibook' && {
+        ...({ //projectAlias !== 'dalibook' && 
             where: {
-                projects: {
-                    some: {
-                        alias: projectAlias as string
+                OR: [
+                    {
+                        projects: {
+                            some: {
+                                alias: projectAlias as string
+                            }
+                        }
+                    },
+                    {
+                        projectsOwned: {
+                            some: {
+                                alias: projectAlias as string
+                            }
+                        }
                     }
-                }
+                ]
             }
         }),
         include: {

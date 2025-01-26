@@ -114,7 +114,7 @@ model PostLike {
     postId String
     memberId Int
 
-    post Post @relation(fields: [postId], references: [id])
+    post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
     member Member @relation(fields: [memberId], references: [id])
 
     @@id([postId, memberId])

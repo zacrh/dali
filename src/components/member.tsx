@@ -14,9 +14,10 @@ const months = [ "January", "February", "March", "April", "May", "June", "July",
 type MemberProps = {
     memberData: MemberItem;
     session: Session | null;
+    owner?: boolean
 };
 
-export default function Member({ memberData, session }: MemberProps) {
+export default function Member({ memberData, session, owner = false }: MemberProps) {
     const [member, setMember] = useState<MemberItem>(memberData);
     const [attributes, setAttributes] = useState<{ [key: string]: string }>({});
     const [moreDropdownOpen, setMoreDropdownOpen] = useState<boolean>(false);
@@ -58,7 +59,7 @@ export default function Member({ memberData, session }: MemberProps) {
                         height={40}
                     />
                 ) : (
-                    <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-secondary border border-gray-300 dark:border-tertiary" />
+                    <svg className="w-10 h-10 rounded-full bg-gray-200 dark:bg-secondary border border-gray-300 dark:border-tertiary" width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="none" data-testid="userAvatarFallback"><circle cx="12" cy="12" r="12" fill="#3F69AD"></circle><circle cx="12" cy="9.5" r="3.5" fill="#fff"></circle><path stroke-linecap="round" stroke-linejoin="round" fill="#fff" d="M 12.058 22.784 C 9.422 22.784 7.007 21.836 5.137 20.262 C 5.667 17.988 8.534 16.25 11.99 16.25 C 15.494 16.25 18.391 18.036 18.864 20.357 C 17.01 21.874 14.64 22.784 12.058 22.784 Z"></path></svg>
                 )}
             </div>
             <div className="flex flex-col w-full">
@@ -72,12 +73,19 @@ export default function Member({ memberData, session }: MemberProps) {
                                 </div>
                             ))
                         }
+                        {
+                            owner && (
+                                <div className="px-1.5 py-0.5 text-red-500 rounded-full bg-red-500/10 text-xs font-medium flex flex-row gap-1 items-center">
+                                    Owner
+                                </div>
+                            )
+                        }
                     </div>
                     <div className="relative">
                         <div className="flex items-center justify-center rounded-full p-1 hover:bg-gray-100 dark:hover:bg-tertiary transition-all duration-200 color-gray-400 dark:text-slate-400" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onMoreClick() }}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-ellipsis w-4 h-4"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
                         </div>
-                        <div id="more-dropdown" className={`z-10 ${moreDropdownOpen ? 'absolute' : 'hidden'} p-1 w-36 rounded-md mt-1 right-0 border border-gray-300 dark:border-border dark:bg-secondary shadow`} onBlur={() => setMoreDropdownOpen(false)}>
+                        <div id="more-dropdown" className={`z-10 -translate-y-[4px] opacity-0 absolute ${moreDropdownOpen ? 'translate-y-0 opacity-100' : 'invisible'} transition-all duration-200 p-1 w-36 rounded-md mt-1 right-0 border border-gray-300 dark:border-border dark:bg-secondary shadow`} onBlur={() => setMoreDropdownOpen(false)}>
                             <ul aria-labelledby="dropdownMoreButton" className="divide-y divide-border text-sm text-gray-700 dark:text-gray-200 overflow-scroll max-h-32">
                                 <li key={"link"} className="cursor-pointer flex items-center py-1 first:pt-0 last:pb-0" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onCopyClick(member.id, "link") } }>
                                     <p className="cursor-pointer flex items-center rounded w-full px-2 py-1 gap-2 text-sm font-medium text-gray-400 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-tertiary">
@@ -147,14 +155,18 @@ export default function Member({ memberData, session }: MemberProps) {
                        
                     </div>
                     <div className="flex flex-row items-center gap-2 mt-0.5">
+                        <Tooltip content="Major · Minor">
                         <div key={'studies'} className="px-1.5 py-0.5 text-gray-600 dark:text-slate-500 rounded-full bg-secondary text-xs font-medium flex flex-row gap-1 items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-library w-3 h-3"><path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/></svg>
                             {member?.major} {member?.minor && " · " + member?.minor}
                         </div>
+                        </Tooltip>
+                        <Tooltip content="Birthday">
                         <div key={'birthday'} className="px-1.5 py-0.5 text-gray-600 dark:text-slate-500 rounded-full bg-secondary text-xs font-medium flex flex-row gap-1 items-center">
                             <svg fill="none" width="28" viewBox="0 0 24 24" height="28" className="w-3 h-3"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="m12 .757 2.122 2.122A3 3 0 0 1 13 7.829V9h4.5a3 3 0 0 1 3 3v1.646c0 .603-.18 1.177-.5 1.658V19a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-3.696a3 3 0 0 1-.5-1.658V12a3 3 0 0 1 3-3H11V7.829a3 3 0 0 1-1.121-4.95L12 .757ZM6.5 11a1 1 0 0 0-1 1v1.646a1 1 0 0 0 .629.928l.5.2a1 1 0 0 0 .742 0l1.015-.405a3 3 0 0 1 2.228 0l1.015.405a1 1 0 0 0 .742 0l1.015-.405a3 3 0 0 1 2.228 0l1.015.405a1 1 0 0 0 .742 0l.5-.2a1 1 0 0 0 .629-.928V12a1 1 0 0 0-1-1h-11ZM6 16.674V19a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-2.326a3 3 0 0 1-2.114-.043l-1.015-.405a1 1 0 0 0-.742 0l-1.015.405a3 3 0 0 1-2.228 0l-1.015-.405a1 1 0 0 0-.742 0l-1.015.405A3 3 0 0 1 6 16.674ZM12.002 6a1 1 0 0 0 .706-1.707L12 3.586l-.707.707A1 1 0 0 0 12.002 6Z"></path></svg>
                             {months[parseInt(member?.birthday.split("-")[0] as string)]}, {parseInt(member?.birthday.split("-")[1] as string)}
                         </div>
+                        </Tooltip>
                     </div>
             </div>
         </Link>

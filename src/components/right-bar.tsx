@@ -67,7 +67,7 @@ export default function RightBar({ session }: RightBarProps ) {
         }
 
         if (window.sessionStorage.getItem("userProjects")) {
-            setUserProjects(JSON.parse(window.sessionStorage.getItem("trendingProjects") || ""));
+            setUserProjects(JSON.parse(window.sessionStorage.getItem("userProjects") || ""));
         } else {
             fetchUserProjects();
         }

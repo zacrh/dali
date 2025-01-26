@@ -20,9 +20,10 @@ type PostFeedProps = {
     session: Session | null;
     subject: string;
     projectAlias: string;
+    projectOwnerId?: number;
   };
 
-export default function ProjectDualFeed({ subject, projectAlias, session }: PostFeedProps) {
+export default function ProjectDualFeed({ subject, projectAlias, session, projectOwnerId = 59 }: PostFeedProps) {
     const [topic, setTopic] = useState<string>("posts");
     const [alias, setAlias] = useState<string>(projectAlias);
     const [posts, setPosts] = useState<PostItem[]|null>(null);
@@ -46,7 +47,7 @@ export default function ProjectDualFeed({ subject, projectAlias, session }: Post
 
         console.log("HELLO", subject, topic, temp_topic);
         
-        const fetchPosts = async () => {
+        const fetchPosts = async ( initial: boolean = false ) => {
             console.log('temp topic', temp_topic);
             setLoading({ ...loading, [temp_topic]: true });
             try {
@@ -61,9 +62,12 @@ export default function ProjectDualFeed({ subject, projectAlias, session }: Post
                     }
                     console.log('data projects ', data);
                     setPeople((prevPeople) => ([
-                        ...(prevPeople || []),
+                        ...(!initial ? (prevPeople || []) : []),
                         ...data.members,
                     ]));
+
+                    const recentFeeds = window.sessionStorage.getItem("recentFeeds") || "{}";
+                    window.sessionStorage.setItem("recentFeeds", JSON.stringify({ ...JSON.parse(recentFeeds), ["project__" + data.project + "__" + temp_topic]: data.members }));
                 } else {
                     const data: GetProjectPostsResponse = await res.json();
                     if (checkForAliasMismatch(projectAlias, data?.project)) { // do this check because sometimes the user might got to a diff project page from this project page before the fetch is done
@@ -72,9 +76,12 @@ export default function ProjectDualFeed({ subject, projectAlias, session }: Post
                     console.log('aliases', projectAlias, alias, newProject)
                     console.log('data posts ', data);
                     setPosts((prevPosts) => ([
-                        ...(prevPosts || []), // Preserve existing categories
+                        ...(!initial ? (prevPosts || []) : []), // Preserve existing categories
                         ...data.posts, // Merge existing and new posts for this category
                     ]));
+
+                    const recentFeeds = window.sessionStorage.getItem("recentFeeds") || "{}";
+                    window.sessionStorage.setItem("recentFeeds", JSON.stringify({ ...JSON.parse(recentFeeds), ["project__" + data.project + "__" + temp_topic]: data.posts }));
                 }
                 console.log('posts', posts);
             } catch (error) {
@@ -85,18 +92,32 @@ export default function ProjectDualFeed({ subject, projectAlias, session }: Post
             }
         };
 
+        const recentFeeds = window.sessionStorage.getItem("recentFeeds") || "{}";
         if (temp_topic.toLowerCase().includes('posts')) {
-            console.log('in here ', posts, loading[temp_topic], newProject);
             if (!newProject && (posts || loading[temp_topic])) {
                 return;
             } else {
-                fetchPosts();
+                fetchPosts(true);
+                if (JSON.parse(recentFeeds)["project__" + projectAlias + "__" + temp_topic]) {
+                    setPosts((prevPosts) => ([
+                        ...(prevPosts || []), // Preserve existing categories
+                        ...JSON.parse(recentFeeds)["project__" + projectAlias + "__" + temp_topic],
+                    ]));
+                    setLoading({ ...loading, [temp_topic]: false });
+                }
             }
         } else {
             if (!newProject && (people || loading[temp_topic])) {
                 return;
             } else {
-                fetchPosts();
+                fetchPosts(true);
+                if (JSON.parse(recentFeeds)["project__" + projectAlias + "__" + temp_topic]) {
+                    setPeople((prevPeople) => ([
+                        ...(prevPeople || []), // Preserve existing categories
+                        ...JSON.parse(recentFeeds)["project__" + projectAlias + "__" + temp_topic],
+                    ]));
+                    setLoading({ ...loading, [temp_topic]: false });
+                }
             }
         }
 
@@ -119,7 +140,9 @@ export default function ProjectDualFeed({ subject, projectAlias, session }: Post
                 ))
             ) : (
                 people?.map((person) => (
-                    <Member memberData={person} session={session} />
+                    person.id !== 59 && ( // don't show Dalibook user
+                        <Member memberData={person} session={session} owner={person.id === projectOwnerId} />
+                    )
                 ))
             )}
 

@@ -18,9 +18,15 @@ export default function Post({ postData, session }: PostProps) {
     const [liked, setLiked] = useState(post.likes.some((like) => like.memberId === session?.user.member.id));
     const [moreDropdownOpen, setMoreDropdownOpen] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
+    const [deleted, setDeleted] = useState<boolean>(false);
     const router = useRouter();
 
     const debounceRef = useRef<NodeJS.Timeout | null>(null); // debounce timer -- used to delay like requests (so people don't spam the server!)
+
+    useEffect(() => {
+        setLiked(post.likes.some((like) => like.memberId === session?.user.member.id));
+    }, [session])
 
     const onMoreClick = (postId: string) => {
         setMoreDropdownOpen(!moreDropdownOpen);
@@ -39,6 +45,37 @@ export default function Post({ postData, session }: PostProps) {
         toast.success(`Copied ${type} to clipboard!`);
 
         setMoreDropdownOpen(false);
+    }
+
+    const onDeleteClick = async (postId: string) => {
+        setMoreDropdownOpen(false);
+        setDeleteLoading(true);
+
+        console.log("IN DELETE CLICK", postId);
+
+        try {
+            const res = await fetch(`/api/posts/delete/${postId}`);
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            const data = await res.json();
+            console.log('data', data);
+            toast.success("Post deleted!");
+            setDeleted(true);
+
+            // update session storage feeds (probably somewhat inefficient (a lot of string/json parsing), but our recent feeds aren't that big for this project, so it should be fine)
+            const feeds = JSON.parse(window.sessionStorage.getItem("recentFeeds") || "{}");
+            for (const key in feeds) {
+                feeds[key] = feeds[key].filter((post: PostItem) => post.id !== postId);
+            }
+            window.sessionStorage.setItem("recentFeeds", JSON.stringify(feeds));
+        } catch (error) {
+            console.log('Error deleting post:', error);
+            toast.error("Failed to delete post");
+            setError("Something went wrong while deleting the post!");
+        } finally {
+            setDeleteLoading(false);
+        }
     }
 
     const onLikeClick = async (postId: string) => {
@@ -103,7 +140,7 @@ export default function Post({ postData, session }: PostProps) {
       }
 
     return(
-        <Link key={post.id} href={`/project/${post.projectId ? post.project.alias : 'dalibook'}`} className="flex flex-row w-full border-b py-3 px-4 border-gray-200 dark:border-tertiary gap-3 hover:bg-gray-100 dark:hover:bg-posthover transition-colors">
+        <Link key={post.id} href={`/project/${post.projectId ? post.project.alias : 'dalibook'}`} className={`flex flex-row w-full border-b py-3 px-4 border-gray-200 dark:border-tertiary gap-3 hover:bg-gray-100 dark:hover:bg-posthover transition-colors ${deleteLoading ? 'opacity-50 pointer-events-none' : ''} ${deleted ? 'hidden' : ''}`}>
                     <Link href={`/profile/${post.author.id}`} className="h-max">
                         {post.author.picture ? (
                             <Image
@@ -114,7 +151,7 @@ export default function Post({ postData, session }: PostProps) {
                                 height={40}
                             />
                         ) : (
-                            <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-secondary border border-gray-300 dark:border-tertiary" />
+                            <svg className="w-10 h-10 rounded-full bg-gray-200 dark:bg-secondary border border-gray-300 dark:border-tertiary" width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="none" data-testid="userAvatarFallback"><circle cx="12" cy="12" r="12" fill="#3F69AD"></circle><circle cx="12" cy="9.5" r="3.5" fill="#fff"></circle><path stroke-linecap="round" stroke-linejoin="round" fill="#fff" d="M 12.058 22.784 C 9.422 22.784 7.007 21.836 5.137 20.262 C 5.667 17.988 8.534 16.25 11.99 16.25 C 15.494 16.25 18.391 18.036 18.864 20.357 C 17.01 21.874 14.64 22.784 12.058 22.784 Z"></path></svg>
                         )}
                     </Link>
                     <div className="flex flex-col pt-0.5 w-full">
@@ -136,16 +173,8 @@ export default function Post({ postData, session }: PostProps) {
                                 <div className="flex items-center justify-center rounded-full p-1 hover:bg-gray-100 dark:hover:bg-tertiary transition-all duration-200 color-gray-400 dark:text-slate-400" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onMoreClick(post.id) }}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-ellipsis w-4 h-4"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
                                 </div>
-                                <div id="more-dropdown" className={`z-10 ${moreDropdownOpen ? 'absolute' : 'hidden'} p-1 w-32 rounded-md mt-1 right-0 border border-gray-300 dark:border-border dark:bg-secondary shadow`} onBlur={() => setMoreDropdownOpen(false)}>
+                                <div id="more-dropdown" className={`z-10 -translate-y-[4px] opacity-0 absolute ${moreDropdownOpen ? 'translate-y-0 opacity-100' : 'invisible'} transition-all duration-200 p-1 w-32 rounded-md mt-1 right-0 border border-gray-300 dark:border-border dark:bg-secondary shadow`} onBlur={() => setMoreDropdownOpen(false)}>
                                     <ul aria-labelledby="dropdownMoreButton" className="divide-y divide-border text-sm text-gray-700 dark:text-gray-200 overflow-scroll max-h-32">
-                                        <li key={"link"} className="cursor-pointer flex items-center py-1 first:pt-0 last:pb-0" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onCopyClick(post.id, "link") } }>
-                                            <p className="cursor-pointer flex items-center rounded w-full px-2 py-1 gap-2 text-sm font-medium text-gray-400 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-tertiary">
-                                                <span className="rounded-full text-gray-400 dark:text-slate-400 ">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-link w-4 h-4"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                                                </span>
-                                                Copy Link
-                                            </p>
-                                        </li>
                                         <li key={"text"} className="cursor-pointer flex items-center py-1 first:pt-0 last:pb-0" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onCopyClick(post.id, "text") } }>
                                             <p className="cursor-pointer flex items-center rounded w-full px-2 py-1 gap-2 text-sm font-medium text-gray-400 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-tertiary">
                                                 <span className="rounded-full text-gray-400 dark:text-slate-400 ">
@@ -154,6 +183,19 @@ export default function Post({ postData, session }: PostProps) {
                                                 Copy Text
                                             </p>
                                         </li>
+                                        {
+                                            post.authorId === session?.user.member.id && (
+                                                <li key={"delete"} className="cursor-pointer flex items-center py-1 first:pt-0 last:pb-0" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDeleteClick(post.id) } }>
+                                                    <p className="cursor-pointer flex items-center rounded w-full px-2 py-1 gap-2 text-sm font-medium text-error hover:bg-gray-50 dark:hover:bg-tertiary">
+                                                        <span className="rounded-full text-error ">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-trash-2 w-4 h-4"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                                                        </span>
+                                                        Delete
+                                                    </p>
+                                                </li>
+                                            )
+                                        }
+                                        
                                     </ul>
                                 </div>
                             </div>

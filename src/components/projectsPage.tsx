@@ -9,6 +9,7 @@ import { toast } from "react-hot-toast";
 import Image from "next/image";
 import { Session } from "next-auth";
 import ProjectSmall from "./projectSmall";
+import ProjectModal from "./projectModal";
 
 type ProjectsPageProps = {
     session: Session | null;
@@ -18,6 +19,7 @@ export default function ProjectsPage({ session }: ProjectsPageProps) {
     const [selfLoading, setSelfLoading] = useState<boolean>(false); // loading status of user's projects
     const [loading, setLoading] = useState<boolean>(false); // loading status of 'all' projects
     const [error, setError] = useState<string | null>(null);
+    const [showModal, setShowModal] = useState<boolean>(false);
     
     const [projects, setProjects] = useState<ProjectItem[]>([]);
     const [userProjects, setUserProjects] = useState<ProjectItem[]>([]);
@@ -37,8 +39,13 @@ export default function ProjectsPage({ session }: ProjectsPageProps) {
                 const data = await res.json();
                 if (mine) {
                     setUserProjects(data);
+
+                    // cache the user's projects
+                    window.sessionStorage.setItem("userProjects", JSON.stringify(data));
                 } else {
                     setProjects(data);
+                    // cache the projects
+                    window.sessionStorage.setItem("projectDiscovery", JSON.stringify(data));
                 }
             } catch (error) {
                 console.log('Error fetching projects:', error);
@@ -52,15 +59,21 @@ export default function ProjectsPage({ session }: ProjectsPageProps) {
             }
         }
 
+        const cachedUserProjects: boolean = window.sessionStorage.getItem("userProjects") ? true : false;
+        if (window.sessionStorage.getItem("userProjects")) {
+            setUserProjects(JSON.parse(window.sessionStorage.getItem("userProjects")!));
+        }
+
         if (session) {
-            if (window.sessionStorage.getItem("userProjects")) {
-                setUserProjects(JSON.parse(window.sessionStorage.getItem("userProjects")!));
-            } else {
-                fetchProjects(true);
-            }
+            fetchProjects(true);
+            if (cachedUserProjects) { setSelfLoading(false) }
         }
 
         fetchProjects(false);
+        if (window.sessionStorage.getItem("projectDiscovery")) {
+            setProjects(JSON.parse(window.sessionStorage.getItem("projectDiscovery") || "{}"));
+            setLoading(false);
+        }
     }, [session])
 
     const onBackClick = () => {
@@ -77,13 +90,26 @@ export default function ProjectsPage({ session }: ProjectsPageProps) {
         
 
         <div className="flex flex-col w-full">
-            <div className="flex flex-row gap-2 px-4 py-2.5 border-b border-gray-200 dark:border-tertiary items-center">
-                <button onClick={() => onBackClick()} className="flex items-center justify-center p-1.5 rounded-full text-white w-max h-max bg-gray-200 dark:bg-secondary hover:bg-gray-300 dark:hover:bg-tertiary transition-colors">
-                    <svg fill="none" viewBox="0 0 24 24" width="24" height="24" className="w-5 h-5"><path fill="white" fill-rule="evenodd" clip-rule="evenodd" d="M3 12a1 1 0 0 1 .293-.707l6-6a1 1 0 0 1 1.414 1.414L6.414 11H20a1 1 0 1 1 0 2H6.414l4.293 4.293a1 1 0 0 1-1.414 1.414l-6-6A1 1 0 0 1 3 12Z"></path></svg>
-                </button>
-                <h2 className="text-md font-semibold flex flex-row items-center gap-1">
-                    Projects
-                </h2>
+            <div className="flex flex-row justify-between px-4 py-2.5 border-b border-gray-200 dark:border-tertiary items-center">
+                <div className="flex flex-row gap-2 items-center">
+                    <button onClick={() => onBackClick()} className="flex items-center justify-center p-1.5 rounded-full text-white w-max h-max bg-gray-200 dark:bg-secondary hover:bg-gray-300 dark:hover:bg-tertiary transition-colors">
+                        <svg fill="none" viewBox="0 0 24 24" width="24" height="24" className="w-5 h-5"><path fill="white" fill-rule="evenodd" clip-rule="evenodd" d="M3 12a1 1 0 0 1 .293-.707l6-6a1 1 0 0 1 1.414 1.414L6.414 11H20a1 1 0 1 1 0 2H6.414l4.293 4.293a1 1 0 0 1-1.414 1.414l-6-6A1 1 0 0 1 3 12Z"></path></svg>
+                    </button>
+                    <h2 className="text-md font-semibold flex flex-row items-center gap-1">
+                        Projects
+                    </h2>
+                </div>
+                {
+                    session && (
+                        <div className="flex flex-row gap-2 items-center">
+                            <button onClick={() => setShowModal(true)} className="flex flex-row items-center gap-1 px-3 py-2 text-xs font-semibold text-gray-300 dark:text-slate-400 rounded-md bg-gray-200 dark:bg-secondary hover:bg-gray-300 dark:hover:bg-tertiary transition-colors">
+                                <svg fill="none" width="16" viewBox="0 0 24 24" height="16"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M12 3a1 1 0 0 1 1 1v7h7a1 1 0 1 1 0 2h-7v7a1 1 0 1 1-2 0v-7H4a1 1 0 1 1 0-2h7V4a1 1 0 0 1 1-1Z"></path></svg>
+                                Create
+                            </button>
+                        </div>
+                    )
+                }
+                
             </div>            
             
             {
@@ -139,6 +165,10 @@ export default function ProjectsPage({ session }: ProjectsPageProps) {
                 <p>{error}</p>
             </div>
             )}
+
+            {
+                <ProjectModal session={session} showing={showModal} setShowModal={setShowModal} />
+            }
         </div>
       </div>
     );

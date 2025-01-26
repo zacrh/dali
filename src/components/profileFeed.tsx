@@ -19,7 +19,7 @@ export default function ProfileFeed({ memberId }: ProfileFeedProps) {
     const { data: session, status } = useSession();
     const [currentFeed, setCurrentFeed] = useState<"Posts"|"Projects">("Posts");
     const [member, setMember] = useState<MemberItem | null>(null);
-    const [attributes] = useState<{ [key: string]: string}>({});
+    const [attributes, setAttributes] = useState<{ [key: string]: string}>({});
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [moreDropdownOpen, setMoreDropdownOpen] = useState<boolean>(false);
@@ -41,9 +41,14 @@ export default function ProfileFeed({ memberId }: ProfileFeedProps) {
                 const data = await res.json();
                 console.log("Member data:", data);
                 setMember(data);
+                let newAttributes: { [key: string]: string } = {};
                 for (let attribute of data.attributes) {
-                    attributes[attribute.name] = attribute.value;
+                    newAttributes[attribute.name] = attribute.value;
                 }
+                setAttributes(newAttributes);
+
+                const recentProfiles = window.sessionStorage.getItem("recentProfiles") || "{}";
+                window.sessionStorage.setItem("recentProfiles", JSON.stringify({ ...JSON.parse(recentProfiles), [memberId]: data }));
             } catch (error) {
                 console.error("Error fetching profile:", error);
                 setError("Something went wrong while fetching profile!");
@@ -53,7 +58,18 @@ export default function ProfileFeed({ memberId }: ProfileFeedProps) {
         }
 
         if (!Number.isNaN(memberId)) {
-            fetchProfile();;
+            fetchProfile();
+            const recentProfiles = window.sessionStorage.getItem("recentProfiles") || "{}";
+            if (JSON.parse(recentProfiles)[memberId]) {
+                const cachedMember = JSON.parse(recentProfiles)[memberId];
+                setMember(cachedMember);
+                let newAttributes: { [key: string]: string } = {};
+                for (let attribute of cachedMember.attributes) {
+                    newAttributes[attribute.name] = attribute.value;
+                }
+                setAttributes(newAttributes);
+                setLoading(false);
+            }
         }
     }, [memberId])
 
@@ -103,12 +119,12 @@ export default function ProfileFeed({ memberId }: ProfileFeedProps) {
                                 <Image
                                     src={member.picture}
                                     alt="Avatar"
-                                    className="w-24 h-24 border-2 border-background rounded-full"
+                                    className="w-24 h-24 object-cover border-2 border-background rounded-full"
                                     width={500}
                                     height={500}
                                 />
                             ) : (
-                                <div className="w-24 h-24 rounded-full bg-gray-200 dark:bg-secondary border-2 border-background" />
+                                <svg className="w-24 h-24 rounded-full bg-gray-200 dark:bg-secondary border-2 border-background" width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="none" data-testid="userAvatarFallback"><circle cx="12" cy="12" r="12" fill="#3F69AD"></circle><circle cx="12" cy="9.5" r="3.5" fill="#fff"></circle><path stroke-linecap="round" stroke-linejoin="round" fill="#fff" d="M 12.058 22.784 C 9.422 22.784 7.007 21.836 5.137 20.262 C 5.667 17.988 8.534 16.25 11.99 16.25 C 15.494 16.25 18.391 18.036 18.864 20.357 C 17.01 21.874 14.64 22.784 12.058 22.784 Z"></path></svg>
                             )
                         }
                         <div className="flex flex-row items-end gap-2 py-2 ">
@@ -116,7 +132,7 @@ export default function ProfileFeed({ memberId }: ProfileFeedProps) {
                                 <button onClick={() => onMoreClick()} className="flex items-center justify-center p-1.5 rounded-full text-white w-max h-max bg-gray-200 dark:bg-secondary hover:bg-gray-300 dark:hover:bg-tertiary transition-colors">
                                     <svg fill="none" width="16" viewBox="0 0 24 24" height="16" className="w-5 h-5"><path fill="hsl(211, 20%, 73.6%)" fill-rule="evenodd" clip-rule="evenodd" d="M2 12a2 2 0 1 1 4 0 2 2 0 0 1-4 0Zm16 0a2 2 0 1 1 4 0 2 2 0 0 1-4 0Zm-6-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"></path></svg>
                                 </button>
-                                <div id="more-dropdown" className={`z-10 ${moreDropdownOpen ? 'absolute' : 'hidden'} p-1 w-36 rounded-md mt-1 right-0 border border-gray-300 dark:border-border dark:bg-secondary shadow`} onBlur={() => setMoreDropdownOpen(false)}>
+                                <div id="more-dropdown" className={`z-10 -translate-y-[4px] opacity-0 absolute ${moreDropdownOpen ? 'translate-y-0 opacity-100' : 'invisible'} transition-all duration-200 p-1 w-36 rounded-md mt-1 right-0 border border-gray-300 dark:border-border dark:bg-secondary shadow`} onBlur={() => setMoreDropdownOpen(false)}>
                                         <ul aria-labelledby="dropdownMoreButton" className="divide-y divide-border text-sm text-gray-700 dark:text-gray-200 overflow-scroll max-h-32">
                                             <li key={"link"} className="cursor-pointer flex items-center py-1 first:pt-0 last:pb-0" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onCopyClick() } }>
                                                 <p className="cursor-pointer flex items-center rounded w-full px-2 py-1 gap-2 text-sm font-medium text-gray-400 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-tertiary">
