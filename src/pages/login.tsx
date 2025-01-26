@@ -19,7 +19,7 @@ export default function Login() {
           </Link>
           <h3 className="text-xl font-semibold pt-1.5">Sign In</h3>
           <p className="text-sm font-medium text-gray-500 dark:text-slate-500">
-            Enter your email — even if it's your first time
+            Enter your email — even if it&apos;s your first time
           </p>
         </div>
         <Form type="login" />

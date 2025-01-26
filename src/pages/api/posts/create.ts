@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
 
 type PostData = {
-    postId: String,
+    postId: string,
     created: boolean,
 }
 
