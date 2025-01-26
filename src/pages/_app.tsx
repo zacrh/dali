@@ -27,7 +27,7 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
             }
           }}
         />
-      </PreviousRouteProvider>
+    </PreviousRouteProvider>
     </SessionProvider>
   );
 }

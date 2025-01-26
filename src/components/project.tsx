@@ -100,7 +100,7 @@ export default function Project({ projectData, session }: ProjectProps) {
                 </div>
                 
                 {
-                    (project.alias !== "dali") && (
+                    (project.alias !== "dali") && (session?.user.member.id) && (
                         <div className="flex p-1.5 rounded-md cursor-pointer hover:bg-gray-300 dark:hover:bg-secondary transition-colors" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onJoinClick(); }}>
                             {
                                 !(joined && project.ownerId === session?.user.member.id) && ( // you can't leave projects you own

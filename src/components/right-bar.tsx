@@ -76,7 +76,9 @@ export default function RightBar({ session }: RightBarProps ) {
 
     return (
         <div className="flex flex-col w-1/3 max-w-[250px] h-full p-4 divide-y divide-border gap-4">
-            <div className="flex flex-col w-full pt-4 gap-2 w-full">
+            {
+                session?.user?.member.id && (
+                <div className="flex flex-col w-full pt-4 gap-2 w-full">
                 {/* <Link href={`/project/dalibook`} className="flex flex-row gap-2">
                     <p className={`text-sm font-medium text-gray-400 dark:text-slate-400`}>Dalibook</p>
                 </Link> */}
@@ -91,6 +93,9 @@ export default function RightBar({ session }: RightBarProps ) {
                     <p className={`text-md text-primary group-hover:underline`}>More Projects</p>
                 </Link>
             </div>
+                )
+            }
+            
             <div className="flex flex-col w-full pt-4 gap-2 w-full">
                 <h2 className="text-sm font-semibold flex flex-row gap-1 items-center">
                     <svg fill="none" viewBox="0 0 24 24" width="16" height="16" className="text-primary"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="m18.192 5.004 1.864 5.31a1 1 0 0 0 1.887-.662L20.08 4.34c-.665-1.893-3.378-1.741-3.834.207l-3.381 14.449-2.985-9.605C9.3 7.531 6.684 7.506 6.07 9.355l-1.18 3.56-.969-2.312a1 1 0 0 0-1.844.772l.97 2.315c.715 1.71 3.159 1.613 3.741-.144l1.18-3.56 2.985 9.605c.607 1.952 3.392 1.848 3.857-.138l3.381-14.449Z"></path></svg>

@@ -120,6 +120,8 @@ export const authOptions: NextAuthOptions = {
           attributes: true,
         }
       });
+      session.user.name = null;
+      session.user.image = null;
       return session;
     }
   }

@@ -6,9 +6,11 @@ import { useSession } from "next-auth/react";
 interface LayoutProps {
     children: ReactNode;
 }
+  
 
 export default function Layout({ children }: LayoutProps) {
     const { data: session, status } = useSession();
+
 
     return (
         <div className="flex h-screen w-screen items-center justify-center">

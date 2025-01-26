@@ -7,7 +7,6 @@ import RightBar from "@/components/right-bar";
 import Layout from "./layout";
 
 export default function Home() {
-
     return(
         <Layout>
             <Feed />

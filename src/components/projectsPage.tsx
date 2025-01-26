@@ -120,7 +120,7 @@ export default function ProjectsPage({ session }: ProjectsPageProps) {
                 )
             }
             {
-                userProjects && (
+                (userProjects && userProjects.length > 0) || (session) && (
                     <div className="flex flex-row gap-2 px-4 p-3 items-start border-b border-gray-200 dark:border-tertiary">
                         <div className="p-3.5 rounded-full bg-primaryhover text-primary h-max">
                             <svg fill="none" viewBox="0 0 24 24" width="24" height="24" className="h-6 w-6"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M4 5a1 1 0 0 0 0 2h16a1 1 0 1 0 0-2H4Zm0 12a1 1 0 1 0 0 2h3a1 1 0 1 0 0-2H4Zm-1-5a1 1 0 0 1 1-1h5a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1Zm14-3a1 1 0 0 1 .92.606l1.342 3.132 3.132 1.343a1 1 0 0 1 0 1.838l-3.132 1.343-1.343 3.132a1 1 0 0 1-1.838 0l-1.343-3.132-3.132-1.343a1 1 0 0 1 0-1.838l3.132-1.343 1.343-3.132A1 1 0 0 1 17 9Zm0 3.539-.58 1.355a1 1 0 0 1-.526.525L14.539 15l1.355.58a1 1 0 0 1 .525.526L17 17.461l.58-1.355a1 1 0 0 1 .526-.525L19.461 15l-1.355-.58a1 1 0 0 1-.525-.526L17 12.539Z"></path></svg>

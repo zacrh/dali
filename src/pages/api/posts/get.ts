@@ -27,7 +27,7 @@ export default async function handler(
 
     const { topic, after, offset } = getPostQuerySchema.parse(req.query);
 
-    if (!session && topic == 'projectes') {
+    if (!session && topic == 'projects') {
         // only allow /all
         res.status(401).send({ error: 'Unauthorized' })
         return;
@@ -110,16 +110,14 @@ export default async function handler(
                       likes: true, // like count
                     },
                   },
-                ...(session?.user.member.id && {
-                    likes: {
-                      where: {
-                        memberId: session?.user.member.id,
-                      },
-                      select: {
-                        memberId: true, // Include any field to determine if the like exists
-                      },
+                likes: {
+                    where: {
+                    memberId: session?.user.member.id,
                     },
-                }),
+                    select: {
+                    memberId: true, // Include any field to determine if the like exists
+                    },
+                },
             },
             take: 30,
             skip: offset,

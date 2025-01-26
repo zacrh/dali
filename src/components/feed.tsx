@@ -17,7 +17,9 @@ export default function Feed() {
     return(
         <div className="flex flex-col w-3/5 w-[52%] h-full overflow-scroll border-l border-r border-gray-200 dark:border-tertiary">
             <div className="flex flex-col w-full">
-                <div className="flex flex-row w-full px-3 mb-2">
+                {
+                    session?.user.member.id && (
+<div className="flex flex-row w-full px-3 mb-2">
                     <div className="w-1/12 h-12 rounded-lg" />
                     <div className="w-10/12 h-12 flex items-center justify-center">
                     <div className="flex w-max pt-4 bg-primary">
@@ -37,6 +39,9 @@ export default function Feed() {
                         </div>
                     </Link>
                 </div>
+                    )
+                }
+                
                 <div className="flex flex-row w-full border-b border-gray-200 dark:border-tertiary  ">
                     <div className="w-1/2 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-secondary transition-all duration-200 overflow-hidden cursor-pointer" onClick={() => onFeedClick("For You")}>
                         <div className="flex flex-col items-center justify-center">
@@ -44,12 +49,23 @@ export default function Feed() {
                             <div className={`w-1/2 h-[3px] bg-primary rounded-t-lg ${currentFeed !== "For You" && 'translate-y-[100%]'} transition-transform duration-100`} />
                         </div>
                     </div>
-                    <div className="w-1/2 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-secondary transition-all duration-200 overflow-hidden cursor-pointer" onClick={() => onFeedClick("Following")}>
-                        <div className="flex flex-col items-center justify-center">
-                            <p className="text-md font-semibold py-1.5 pt-3">Following</p>
-                            <div className={`w-1/2 h-[3px] bg-primary rounded-t-lg ${currentFeed !== "Following" && 'translate-y-[100%]'} transition-transform duration-100`} />
-                        </div>
-                    </div>
+                    {
+                        session?.user.member.id ? (
+                            <div className="w-1/2 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-secondary transition-all duration-200 overflow-hidden cursor-pointer" onClick={() => onFeedClick("Following")}>
+                                <div className="flex flex-col items-center justify-center">
+                                    <p className="text-md font-semibold py-1.5 pt-3">Following</p>
+                                    <div className={`w-1/2 h-[3px] bg-primary rounded-t-lg ${currentFeed !== "Following" && 'translate-y-[100%]'} transition-transform duration-100`} />
+                                </div>
+                            </div>
+                        ) : (
+                            <Link href="/projects" className="w-1/2 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-secondary transition-all duration-200 overflow-hidden cursor-pointer">
+                                <div className="flex flex-col items-center justify-center">
+                                    <p className="text-md font-semibold py-1.5 pt-3">Projects</p>
+                                </div>
+                            </Link>
+                        )
+                    }
+                   
                 </div>
             </div>
             <PostFeed subject={currentFeed} session={session} />

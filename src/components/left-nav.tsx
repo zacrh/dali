@@ -19,7 +19,6 @@ export default function LeftNav({ session }: LeftBarProps) {
     const pathName = usePathname();
 
     useEffect(() => {
-        console.log(session);
 
         const fetchUserProjects = async () => {
             if (session?.user?.member) {
@@ -54,7 +53,9 @@ export default function LeftNav({ session }: LeftBarProps) {
     return (
       <div className="flex flex-col w-1/3 max-w-[250px] h-full p-4">
         <div className="flex flex-col w-full mt-2">
-          <div className="flex flex-row gap-2 items-center mb-4 px-3">
+        {
+            session?.user.member.id ? (
+<div className="flex flex-row gap-2 items-center mb-4 px-3">
             {session?.user?.image ? (
               <Image
                 src={session.user.image}
@@ -66,17 +67,41 @@ export default function LeftNav({ session }: LeftBarProps) {
             ) : (
                 <svg className="w-11 h-11 rounded-full bg-gray-200 dark:bg-secondary border-gray-300 border dark:border-tertiary" width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="none" data-testid="userAvatarFallback"><circle cx="12" cy="12" r="12" fill={`${session?.user.member.id % 2 === 0 ? "#3F69AD" : "#1E2C42"}`}></circle><circle cx="12" cy="9.5" r="3.5" fill={`${session?.user.member.id % 2 === 0 ? "#FFF" : "#3F69AD"}`}></circle><path stroke-linecap="round" stroke-linejoin="round" fill={`${session?.user.member.id % 2 === 0 ? "#FFF" : "#3F69AD"}`} d="M 12.058 22.784 C 9.422 22.784 7.007 21.836 5.137 20.262 C 5.667 17.988 8.534 16.25 11.99 16.25 C 15.494 16.25 18.391 18.036 18.864 20.357 C 17.01 21.874 14.64 22.784 12.058 22.784 Z"></path></svg>
             )}
-            <div className="flex flex-col">
-              <h2 className="text-md font-semibold truncate max-w-[150px]">
-                {session?.user?.member?.name.split(" ")[0]}
-              </h2>
-              <p className="text-sm text-gray-600 dark:text-slate-500 truncate max-w-[150px]">
-                {session?.user?.member?.name.split(" ")[1]}
-              </p>
-            </div>
+                    <div className="flex flex-col">
+                    <h2 className="text-md font-semibold truncate max-w-[150px]">
+                        {session?.user?.member?.name.split(" ")[0]}
+                    </h2>
+                    <p className="text-sm text-gray-600 dark:text-slate-500 truncate max-w-[150px]">
+                        {session?.user?.member?.name.split(" ")[1]}
+                    </p>
+                    </div>
+            
           </div>
+            ) : (
+                <div className="flex flex-col gap-2 ml-5 -mt-6">
+                    <div className="flex w-max pt-4 bg-primary">
+                                            <Image
+                                                src="/dalibook.png"
+                                                priority
+                                                alt="Logo"
+                                                className="w-10 rounded-sm"
+                                                width={500}
+                                                height={500}
+                                                />
+                                                </div>
+                        <h2 className="text-xl font-bold">Share what you're building in DALI</h2>
+                        <Link href="/login" className="flex flex-row items-center gap-1 px-3 py-1.5 w-max text-sm font-semibold text-white rounded-md  bg-primary hover:brightness-125 transition-all">
+                            Sign In
+                        </Link>
+                    </div>
+            )
+        }
+          
 
-          <Link
+{
+                    session?.user.member.id && (
+                        <>
+                        <Link
             href="/"
             className="flex flex-row items-center gap-2 hover:bg-gray-50 dark:hover:bg-secondary px-3 py-2 rounded-lg"
           >
@@ -209,30 +234,39 @@ export default function LeftNav({ session }: LeftBarProps) {
               Profile
             </p>
           </Link>
+          </>
+                    )
+}
+          
 
-          <div className="flex pt-4 pl-3">
-            <button
-              onClick={() => setShowModal(true)}
-              className="flex flex-row items-center gap-2 bg-primary border-primary text-white text-sm font-medium hover:brightness-125 px-4 py-2 items-center justify-center rounded-full border transition-all focus:outline-none"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                className="lucide lucide-square-pen h-4 w-4"
-              >
-                <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
-              </svg>
-              <p>New Post</p>
-            </button>
-          </div>
+                {
+                    session?.user.member.id && (
+                        <div className="flex pt-4 pl-3">
+                            <button
+                            onClick={() => setShowModal(true)}
+                            className="flex flex-row items-center gap-2 bg-primary border-primary text-white text-sm font-medium hover:brightness-125 px-4 py-2 items-center justify-center rounded-full border transition-all focus:outline-none"
+                            >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                className="lucide lucide-square-pen h-4 w-4"
+                            >
+                                <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
+                            </svg>
+                            <p>New Post</p>
+                            </button>
+                        </div>
+                    )
+                }
+          
         </div>
         {
           // showModal && (

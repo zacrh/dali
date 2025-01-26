@@ -146,8 +146,8 @@ export default function ProjectFeed({ projectAlias }: ProjectFeedProps) {
             if (Object.keys(JSON.parse(cachedProjects)).includes(projectAlias)) {
                 setProject(JSON.parse(cachedProjects)[projectAlias]);
                 setJoined(JSON.parse(cachedProjects)[projectAlias].members.some((member: { id: string }) => member.id === session?.user.member.id) || JSON.parse(cachedProjects)[projectAlias].owner.id === session?.user.member.id);
+                setLoading(false);
             }
-            setLoading(false);
         }
     }, [projectAlias])
 
@@ -201,7 +201,7 @@ export default function ProjectFeed({ projectAlias }: ProjectFeedProps) {
                                     <h2 className="text-2xl font-semibold">{project.name} <span className="font-medium text-gray-500 dark:text-slate-500 ml-1">#{project.alias}</span></h2>
                                     <div className="flex flex-row items-end gap-2">
                                         {
-                                            !(joined && project.ownerId === session?.user.member.id) && (project.alias !== "dali") && (
+                                            !(joined && project.ownerId === session?.user.member.id) && (project.alias !== "dali") && (session?.user.member.id) && (
                                                 <Tooltip content={joined ? "Leave" : "Join"}>
                                                     <button onClick={() => onJoinClick()} className="flex items-center justify-center p-1.5 rounded-full text-white w-max h-max bg-gray-200 dark:bg-secondary hover:bg-gray-300 dark:hover:bg-tertiary transition-colors">
                                                         {
