@@ -19,7 +19,7 @@ export async function sendVerifyRequest(params: Params) {
     const transport = createTransport({
         host: 'smtp.resend.com',
         secure: true,
-        port: 465,
+        port: 587,
         auth: {
             user: process.env.EMAIL_USERNAME,
             pass: process.env.EMAIL_PASSWORD,
