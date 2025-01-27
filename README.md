@@ -4,7 +4,7 @@
 
 # The Dalibook
 
-Dalibook is a special type of social network, designed purposefuly for members of the DALI Lab. It's a place for members to share their updates about projects, show love to other members (on or off their team!), and learn about what's happening in the lab. Additionally, profiles allow members to share interests, fun facts, and their major. Dalibook is my solution to the social media challenge as part of DALI's 2025 application. Check it out at [thedalibook.com](https://dalibook.com) ([direct link](https://dali.0z.gg)).
+Dalibook is a special type of social network, designed purposefuly for members of the DALI Lab. It's a place for members to share their updates about projects, show love to other members (on or off their team!), and learn about what's happening in the lab. Additionally, profiles allow members to share interests, fun facts, and their major. Dalibook is my solution to the social media challenge as part of DALI's 2025 application. Check it out at [thedalibook.com](https://thedalibook.com) ([direct link](https://dali.0z.gg)).
 
 Watch the demo [here](demo.thedalibook.com) ([demo.thedalibook.com](https://demo.thedalibook.com)).
 
