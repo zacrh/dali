@@ -29,7 +29,7 @@ export default function Form({ type }: { type: "login" | "register" }) {
                 signIn("email", {
                     redirect: false,
                     email: e.currentTarget.email.value,
-                    callbackUrl: process.env.NODE_ENV === "development" ? "http://127.0.0.1:3000" : "https://dali.0z.gg/",
+                    callbackUrl: "https://dali.0z.gg/onboarding",
                     // password: e.currentTarget.password.value,
                   }).then((response) => {
                     if (response?.error) {
