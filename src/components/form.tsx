@@ -4,6 +4,7 @@ import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { emailValidator } from "@/validations/email";
 
 const authType = "email";
 
@@ -18,10 +19,10 @@ export default function Form({ type }: { type: "login" | "register" }) {
       onSubmit={(e) => {
         e.preventDefault();
         setError("");
-        // if (!emailValidator(e.currentTarget.email.value)) {
-        //     setError("Please enter a valid Dartmouth email (not a Blitz alias)")
-        //     return;
-        // }
+        if (!emailValidator(e.currentTarget.email.value)) {
+            setError("Please enter a valid Dartmouth email (not a Blitz alias)")
+            return;
+        }
         setLoading(true);
         if (type === "login") {
             if (authType === "email") {
