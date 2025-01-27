@@ -8,8 +8,26 @@ import WelcomeForm from "@/components/welcome-form";
 // Member type without database-controlled fields — almost a 'work in progress' row
 type WorkingMember = Omit<Member, "id" | "createdAt" | "updatedAt">;
 
-export default function Onboarding() {
-    const { data: session, status } = useSession();
+import { Session } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next"
+import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
+
+interface ServerSideProps {
+    session: Session | null;
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<ServerSideProps>> {
+    const session = await getServerSession(context.req, context.res, authOptions);
+  
+    return {
+      props: {
+        session: JSON.parse(JSON.stringify(session)),
+      },
+    }
+}
+
+export default function Onboarding({ session }: ServerSideProps) {
     const [email, setEmail] = useState("");
     const [memberData, setMemberData] = useState<WorkingMember | null>(null);
 
