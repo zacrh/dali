@@ -1,4 +1,5 @@
 import { createTransport } from "nodemailer";
+import { resend } from "@/lib/resend";
 
 type Params = {
     identifier: string;
@@ -61,6 +62,24 @@ export async function sendVerifyRequest(params: Params) {
         console.log("After mail sent");
     
 
+}
+
+export async function sendResendVerifyRequest(params: Params) {
+    const { identifier, url, provider } = params;
+    const { host } = new URL(url);
+
+    try {
+        const data = await resend.emails.send({
+            from: provider.from,
+            to: [identifier],
+            subject: `Log in to Dalibook`,
+            text: text({ url, host }),
+            html: html({ url, host }),
+        })
+        return { success: true, data }
+    } catch (error) {
+        throw new Error('Failed to send verification email')
+    }
 }
 
 /**

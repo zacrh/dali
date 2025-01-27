@@ -4,7 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import EmailProvider from "next-auth/providers/email";
 import prisma from "@/lib/prisma";
 import { compare } from "bcryptjs";
-import { sendVerifyRequest } from "@/lib/sendVerifyRequest";
+import { sendResendVerifyRequest } from "@/lib/sendVerifyRequest";
 import { dartmouthEmailPattern } from "@/validations/email";
 
 export const authOptions: NextAuthOptions = {
@@ -44,7 +44,7 @@ export const authOptions: NextAuthOptions = {
         url,
         provider: { server, from },
       }) {
-        sendVerifyRequest({ identifier: email, url: url, provider: { server: server as string, from: from } })
+        sendResendVerifyRequest({ identifier: email, url: url, provider: { server: server as string, from: from } })
       },
     }),
   ],
