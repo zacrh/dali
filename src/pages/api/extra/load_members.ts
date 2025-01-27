@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import type { NextApiRequest, NextApiResponse } from "next";
 
+// This link is probably stale, get a new one from the `dali_social_media.json` file here: https://dalilab.notion.site/Social-Media-Challenge-72a37c4d33d44de194e66253e7efe7a0
 const members_url = "https://file.notion.so/f/f/18c4d430-a651-43c3-a3cb-b60a5d7dff60/26f362af-0a5c-410b-b275-f2e886d6a020/dali_social_media.json?table=block&id=136fe958-d92f-80a2-a1ac-e1cb5783590d&spaceId=18c4d430-a651-43c3-a3cb-b60a5d7dff60&expirationTimestamp=1736985600000&signature=4GtX2cEUYlGDzuBj_2_RtYtNWUlZ0vXNQpdR_0T5GnU&downloadName=dali_social_media.json"
 
 type MemberData = {
@@ -32,16 +33,51 @@ export default async function handler(
     fetch(members_url).then(res => res.json()).then(async (res: MemberData[]) => {
         console.log('in here')
         // Create Role Records
-        // const newRoles = await prisma.role.createMany({
-        //     data: [
-        //         { alias: 'dev', name: 'Developer' },
-        //         { alias: 'des', name: 'Designer' },
-        //         { alias: 'pm', name: 'Product Manager' },
-        //         { alias: 'core', name: 'Core' },
-        //         { alias: 'mentor', name: 'Mentor' }
-        //         { alias: 'applicant', name: 'Applicant' }
-        //     ]
-        // })
+        const newRoles = await prisma.role.createMany({
+            data: [
+                { alias: 'dev', name: 'Developer' },
+                { alias: 'des', name: 'Designer' },
+                { alias: 'pm', name: 'Product Manager' },
+                { alias: 'core', name: 'Core' },
+                { alias: 'mentor', name: 'Mentor' },
+                { alias: 'applicant', name: 'Applicant' }
+            ]
+        })
+
+        const firstMember = prisma.member.create({
+            data: {
+                name: 'Dalibook',
+                picture: 'https://static.valorantstats.xyz/miscellaneous/dalibook-logo.png',
+                year: '2028',
+                major: 'Computer Science',
+                birthday: '01-01',
+                home: 'Hanover, NH'
+            }
+        })
+
+        const firstId = (await firstMember).id
+
+        const newProject = await prisma.project.create({
+            data: {
+                alias: 'dali',
+                name: 'DALI Lab',
+                picture: 'https://static.valorantstats.xyz/miscellaneous/dali-lab.png',
+                description: "Parent project for all DALI Lab projects. Members are limited to current and past DALI members. (Meant to serve as the place to view all of the provided member data).",
+                ownerId: firstId,
+            }
+        })
+
+        const secondProject = await prisma.project.create({
+            data: {
+                alias: 'dalibook',
+                name: 'Dalibook',
+                picture: 'https://static.valorantstats.xyz/miscellaneous/dalibook-logo.png',
+                description: "Anything and everything Dalibook! Non-project specific posts will end up here.",
+                ownerId: firstId,
+            }
+        })
+
+        const newProjectId = newProject.id
         console.log('test')
 
         for (const member of res) {
@@ -102,6 +138,20 @@ export default async function handler(
                 data: memberRoles
             })
             console.log("created, ", newMemberRoles)
+
+            // add member to dali lab project
+            const join = await prisma.project.update({
+                where: {
+                    alias: 'dali'
+                },
+                data: {
+                    members: {
+                        connect: {
+                            id: newMember.id
+                        }
+                    }
+                }
+            })
         }
     })
 
