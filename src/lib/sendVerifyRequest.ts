@@ -25,16 +25,40 @@ export async function sendVerifyRequest(params: Params) {
         }
     });
 
+    console.log("before verify")
+    await new Promise((resolve, reject) => {
+        transport.verify(function (error, success) {
+            if (error) {
+                console.log('Error verifying transport', error)
+                reject(error)
+            } else {
+                console.log('Server is ready to take our messages', success)
+                resolve(success)
+            }
+        })
+    });
+    console.log('after verify')
+
     console.log('after create transport')
-        console.log('right before')
-        const result = await transport.sendMail({
+    console.log('right before')
+    await new Promise((resolve, reject) => {
+        transport.sendMail({
             to: identifier,
             from: provider.from,
             subject: `Log in to Dalibook`,
             text: text({ url, host }),
             html: html({ url, host }),
-          })    
-          console.log("After mail sent", result);
+        }, (err, info) => {
+            if (err) {
+                console.log('Error sending email', err)
+                reject(err)
+            } else {
+                console.log('Email sent', info)
+                resolve(info);
+            }
+        })
+    })
+        console.log("After mail sent");
     
 
 }
