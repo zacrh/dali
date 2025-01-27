@@ -31,6 +31,9 @@ Dalibook is a special type of social network, designed purposefuly for members o
 9. Visit [127.0.0.1:3000](http://127.0.0.1:3000) in your browser to see the app in action! 🚀
     - Feel free to make an account with your email — will only work if you followed the SMTP setup in `example.env`
 
+### Notes
+- If you're encountering an error after signing in on the official site (dali.0z.gg), just navigate directly to [dali.0z.gg/onboarding](https://dali.0z.gg/onboarding) in your browser to finish onboarding — some issue with session tokens in production.
+
 ## Learning Journey
 ### Inspiration
 I chose the social media challenge in particular since it had to do with displaying member information. Earlier in the term, I wanted to see all of the members + alumni in DALI Lab, but ended up just finding a Notion page with all of the members, so it seemed like a good opportunity to fix that. Pretty soon I realized a landing page like that was a little too simple, so I thought about Google's Memegen (their internal message board), and wanted to make a similar platform for DALI — built around projects members are working on specifically.
