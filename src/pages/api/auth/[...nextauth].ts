@@ -44,11 +44,11 @@ export const authOptions: NextAuthOptions = {
         url,
         provider: { server, from },
       }) {
-        process.env.NODE_ENV === "development" ? (
+        if (process.env.NODE_ENV === "development") {
           sendVerifyRequest({ identifier: email, url: url, provider: { server: server as string, from: from } })
-        ) : (
+        } else {
           sendResendVerifyRequest({ identifier: email, url: url, provider: { server: server as string, from: from } })
-        )
+        }
       },
     }),
   ],
